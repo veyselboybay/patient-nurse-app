@@ -16,7 +16,7 @@ const ADD_MOTIVATION = gql`
     }
   }
 `;
-//function component to add a student
+// Motivational tips are added by a nurse
 const AddMotivation = () => {
   //
   let navigate = useNavigate();
