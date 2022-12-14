@@ -27,7 +27,7 @@ const CourseList = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-
+  // Nurse is able to see motivational list here
   return (
     <div>
       <Table>
