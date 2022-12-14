@@ -4,8 +4,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import { useNavigate, Link } from "react-router-dom";
-import Nav from "react-bootstrap/Nav";
+import { useNavigate } from "react-router-dom";
 //
 //
 // To parse the GraphQL operations, we use a special function
@@ -13,32 +12,30 @@ import Nav from "react-bootstrap/Nav";
 // as JavaScript strings. This function is named gql
 //
 // note the backquotes here
-const GET_STUDENTS = gql`
+const GET_COURSES = gql`
   {
-    students {
+    courses {
       _id
-      firstName
-      lastName
-      email
-      college
-      program
-      startingYear
+      courseCode
+      courseName
+      section
+      semester
     }
   }
 `;
-
-const DELETE_STUDENT = gql`
-  mutation deleteStudent($id: String!) {
-    deleteStudent(id: $id) {
+const DELETE_COURSE = gql`
+  mutation deleteCourse($id: String!) {
+    deleteCourse(id: $id) {
       _id
     }
   }
 `;
-
-const StudentList = () => {
+//
+const CourseList = () => {
   const navigate = useNavigate();
-  const { loading, error, data, refetch } = useQuery(GET_STUDENTS);
-  const [deleteStudent, { data1 }] = useMutation(DELETE_STUDENT);
+  const { loading, error, data, refetch } = useQuery(GET_COURSES);
+  const [deleteCourse, { deletedData }] = useMutation(DELETE_COURSE);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
@@ -47,35 +44,30 @@ const StudentList = () => {
       <Table>
         <tbody>
           <tr>
-            <th>Student id</th>
-            <th>firstName</th>
-            <th>lastName</th>
-            <th>program</th>
+            <th>Course id</th>
+            <th>Course Code</th>
+            <th>Course Name</th>
+            <th>Section</th>
           </tr>
-
-          {data.students.map((student, index) => (
+          {data.courses.map((course, index) => (
             <tr key={index}>
-              <td>{student._id}</td>
-              <td>{student.firstName}</td>
-              <td>{student.lastName}</td>
-              <td>{student.program}</td>
+              <td>{course._id}</td>
+              <td>{course.courseCode}</td>
+              <td>{course.courseName}</td>
+              <td>{course.section}</td>
               <td>
                 <Button
-                  style={{ backgroundColor: "green" }}
-                  onClick={() =>
-                    navigate(`/editstudent`, {
-                      state: { student },
-                    })
-                  }
+                  style={{ "background-color": "green" }}
+                  onClick={() => navigate("/editcourse", { state: { course } })}
                 >
                   Edit
                 </Button>
               </td>
               <td>
                 <Button
-                  style={{ backgroundColor: "red" }}
+                  style={{ "background-color": "red" }}
                   onClick={() => {
-                    deleteStudent({ variables: { id: student._id } });
+                    deleteCourse({ variables: { id: course._id } });
                     window.location.reload();
                   }}
                 >
@@ -89,9 +81,9 @@ const StudentList = () => {
 
       <Button
         style={{ backgroundColor: "lightblue", color: "black" }}
-        onClick={() => navigate(`/addstudent`)}
+        onClick={() => navigate(`/addcourse`)}
       >
-        Add Student
+        Add Course
       </Button>
       <Button style={{ backgroundColor: "green" }} onClick={() => refetch()}>
         Refetch
@@ -100,4 +92,4 @@ const StudentList = () => {
   );
 };
 
-export default StudentList;
+export default CourseList;
