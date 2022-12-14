@@ -16,9 +16,9 @@ module.exports = function () {
       console.log("Error");
     });
 
-  // Load the 'User' model
-  require("../models/Student");
-  require("../models/Course");
+  // Load the 'User, MotivationalTips, VitalSigns' model
+  require("../models/MotivationalTips");
+  require("../models/VitalSigns");
   require("../models/User");
 
   // Return the Mongoose connection instance

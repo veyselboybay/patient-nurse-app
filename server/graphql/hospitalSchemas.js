@@ -15,7 +15,72 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = "some_secret_key"; // generate this elsewhere
 const jwtExpirySeconds = 300;
-//
+
+// Create a user Type
+const userType = new GraphQLObjectType({
+  name: "user",
+  fields: function () {
+    return {
+      userName: {
+        type: GraphQLString,
+      },
+      email: {
+        type: GraphQLString,
+      },
+      password: {
+        type: GraphQLString,
+      },
+      userType: {
+        type: GraphQLString,
+      },
+    };
+  },
+});
+// Create a VitalSigns graphql schema
+const vitalSignsType = new GraphQLObjectType({
+  name: "vitalSigns",
+  fields: function () {
+    return {
+      _id: {
+        type: GraphQLString,
+      },
+      patientId: {
+        type: GraphQLString,
+      },
+      bodyTemperature: {
+        type: GraphQLInt,
+      },
+      heartRate: {
+        type: GraphQLInt,
+      },
+      bloodPressure: {
+        type: GraphQLInt,
+      },
+      respiratoryRate: {
+        type: GraphQLInt,
+      },
+      lastVisit: {
+        type: GraphQLString,
+      },
+    };
+  },
+});
+
+// Create a Motivational Tips type
+const motivationalTipsType = new GraphQLObjectType({
+  name: "motivationalTips",
+  fields: function () {
+    return {
+      _id: {
+        type: GraphQLString,
+      },
+      tip: {
+        type: GraphQLString,
+      },
+    };
+  },
+});
+
 // Create a GraphQL Object Type for Student model
 const studentType = new GraphQLObjectType({
   name: "student",
@@ -68,22 +133,7 @@ const courseType = new GraphQLObjectType({
     };
   },
 });
-const userType = new GraphQLObjectType({
-  name: "user",
-  fields: function () {
-    return {
-      userName: {
-        type: GraphQLString,
-      },
-      email: {
-        type: GraphQLString,
-      },
-      password: {
-        type: GraphQLString,
-      },
-    };
-  },
-});
+
 // create a GraphQL query type that returns all students or a student by id
 const queryType = new GraphQLObjectType({
   name: "Query",
