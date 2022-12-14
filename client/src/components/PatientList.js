@@ -29,7 +29,7 @@ const StudentList = () => {
   const { loading, error, data, refetch } = useQuery(GET_USERS);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-
+  // Nurse is able to see patient list
   return (
     <div>
       <Table>
