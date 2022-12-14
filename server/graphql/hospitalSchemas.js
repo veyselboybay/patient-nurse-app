@@ -21,6 +21,9 @@ const userType = new GraphQLObjectType({
   name: "user",
   fields: function () {
     return {
+      _id: {
+        type: GraphQLString,
+      },
       userName: {
         type: GraphQLString,
       },
@@ -113,8 +116,8 @@ const queryType = new GraphQLObjectType({
       },
       users: {
         type: new GraphQLList(userType),
-        resolve: function () {
-          const users = UserModel.findOne({ userType: "Patient" }).exec();
+        resolve: function (root, params) {
+          const users = UserModel.find({}).exec();
           if (!users) {
             throw new Error("Error");
           }

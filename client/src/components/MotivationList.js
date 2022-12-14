@@ -12,29 +12,18 @@ import { useNavigate } from "react-router-dom";
 // as JavaScript strings. This function is named gql
 //
 // note the backquotes here
-const GET_COURSES = gql`
+const GET_MOTIVATION = gql`
   {
-    courses {
-      _id
-      courseCode
-      courseName
-      section
-      semester
+    motivationalTips {
+      tip
     }
   }
 `;
-const DELETE_COURSE = gql`
-  mutation deleteCourse($id: String!) {
-    deleteCourse(id: $id) {
-      _id
-    }
-  }
-`;
+
 //
 const CourseList = () => {
   const navigate = useNavigate();
-  const { loading, error, data, refetch } = useQuery(GET_COURSES);
-  const [deleteCourse, { deletedData }] = useMutation(DELETE_COURSE);
+  const { loading, error, data, refetch } = useQuery(GET_MOTIVATION);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
@@ -44,46 +33,28 @@ const CourseList = () => {
       <Table>
         <tbody>
           <tr>
-            <th>Course id</th>
-            <th>Course Code</th>
-            <th>Course Name</th>
-            <th>Section</th>
+            <th>No:</th>
+            <th>Motivation Tip</th>
           </tr>
-          {data.courses.map((course, index) => (
-            <tr key={index}>
-              <td>{course._id}</td>
-              <td>{course.courseCode}</td>
-              <td>{course.courseName}</td>
-              <td>{course.section}</td>
-              <td>
-                <Button
-                  style={{ "background-color": "green" }}
-                  onClick={() => navigate("/editcourse", { state: { course } })}
-                >
-                  Edit
-                </Button>
-              </td>
-              <td>
-                <Button
-                  style={{ "background-color": "red" }}
-                  onClick={() => {
-                    deleteCourse({ variables: { id: course._id } });
-                    window.location.reload();
-                  }}
-                >
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {data.motivationalTips.length === 0 && (
+            <h3>There is no motivational tip yet!</h3>
+          )}
+          {data &&
+            data.motivationalTips.map((tip, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{tip.tip}</td>
+                <td></td>
+              </tr>
+            ))}
         </tbody>
       </Table>
 
       <Button
         style={{ backgroundColor: "lightblue", color: "black" }}
-        onClick={() => navigate(`/addcourse`)}
+        onClick={() => navigate(`/addmotivation`)}
       >
-        Add Course
+        Add Motivational Tip
       </Button>
       <Button style={{ backgroundColor: "green" }} onClick={() => refetch()}>
         Refetch

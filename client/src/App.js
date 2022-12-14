@@ -24,8 +24,7 @@ import EditStudent from "./components/EditStudent";
 
 import Home from "./components/Home";
 import MotivationList from "./components/MotivationList";
-import AddCourse from "./components/AddCourse";
-import EditCourse from "./components/EditCourse";
+import AddMotivation from "./components/AddMotivation";
 import SignUp from "./auth/SignUp";
 import Login from "./auth/Login";
 
@@ -85,8 +84,7 @@ function App() {
           <Route path="addstudent" element={<AddStudent />} />
           <Route path="editstudent" element={<EditStudent />} />
           <Route path="motivationlist" element={<MotivationList />} />
-          <Route path="addcourse" element={<AddCourse />} />
-          <Route path="editcourse" element={<EditCourse />} />
+          <Route path="addmotivation" element={<AddMotivation />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<Login />} />
         </Routes>

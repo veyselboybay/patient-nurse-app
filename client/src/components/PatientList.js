@@ -13,23 +13,10 @@ import Nav from "react-bootstrap/Nav";
 // as JavaScript strings. This function is named gql
 //
 // note the backquotes here
-const GET_STUDENTS = gql`
-  {
-    students {
-      _id
-      firstName
-      lastName
-      email
-      college
-      program
-      startingYear
-    }
-  }
-`;
+
 const GET_USERS = gql`
   {
     users {
-      _id
       userName
       email
       userType
@@ -37,18 +24,9 @@ const GET_USERS = gql`
   }
 `;
 
-const DELETE_STUDENT = gql`
-  mutation deleteStudent($id: String!) {
-    deleteStudent(id: $id) {
-      _id
-    }
-  }
-`;
-
 const StudentList = () => {
   const navigate = useNavigate();
   const { loading, error, data, refetch } = useQuery(GET_USERS);
-  // const [deleteStudent, { data1 }] = useMutation(DELETE_STUDENT);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
@@ -57,52 +35,30 @@ const StudentList = () => {
       <Table>
         <tbody>
           <tr>
-            <th>Student id</th>
-            <th>firstName</th>
-            <th>lastName</th>
-            <th>program</th>
+            <th>UserName</th>
+            <th>Email</th>
           </tr>
 
-          {/* {data.students.map((student, index) => (
+          {data.users.map((user, index) => (
             <tr key={index}>
-              <td>{student._id}</td>
-              <td>{student.firstName}</td>
-              <td>{student.lastName}</td>
-              <td>{student.program}</td>
+              <td>{user.userName}</td>
+              <td>{user.email}</td>
               <td>
                 <Button
                   style={{ backgroundColor: "green" }}
                   onClick={() =>
                     navigate(`/editstudent`, {
-                      state: { student },
+                      state: { user },
                     })
                   }
                 >
-                  Edit
-                </Button>
-              </td>
-              <td>
-                <Button
-                  style={{ backgroundColor: "red" }}
-                  onClick={() => {
-                    // deleteStudent({ variables: { id: student._id } });
-                    window.location.reload();
-                  }}
-                >
-                  Delete
+                  Go to Patient Page
                 </Button>
               </td>
             </tr>
-          ))} */}
+          ))}
         </tbody>
       </Table>
-
-      <Button
-        style={{ backgroundColor: "lightblue", color: "black" }}
-        onClick={() => navigate(`/addstudent`)}
-      >
-        Add Student
-      </Button>
       <Button style={{ backgroundColor: "green" }} onClick={() => refetch()}>
         Refetch
       </Button>
