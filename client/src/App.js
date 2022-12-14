@@ -18,12 +18,12 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import "./App.css";
 //
-import StudentList from "./components/StudentList";
+import PatientList from "./components/PatientList";
 import AddStudent from "./components/AddStudent";
 import EditStudent from "./components/EditStudent";
 
 import Home from "./components/Home";
-import CourseList from "./components/CourseList";
+import MotivationList from "./components/MotivationList";
 import AddCourse from "./components/AddCourse";
 import EditCourse from "./components/EditCourse";
 import SignUp from "./auth/SignUp";
@@ -35,18 +35,18 @@ function App() {
     <Router>
       <Navbar bg="primary" variant="dark" expand="lg">
         <Container>
-          <Navbar.Brand href="home">Lab 3</Navbar.Brand>
+          <Navbar.Brand href="home">Hospital Patient System</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link as={Link} to="/home">
                 Home
               </Nav.Link>
-              <Nav.Link as={Link} to="/studentlist">
-                Student List
+              <Nav.Link as={Link} to="/patientlist">
+                Patient List
               </Nav.Link>
-              <Nav.Link as={Link} to="/courselist">
-                Course List
+              <Nav.Link as={Link} to="/motivationlist">
+                Motivation Tips
               </Nav.Link>
               <Nav.Link
                 as={Link}
@@ -81,10 +81,10 @@ function App() {
         <Routes>
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
-          <Route path="studentlist" element={<StudentList />} />
+          <Route path="patientlist" element={<PatientList />} />
           <Route path="addstudent" element={<AddStudent />} />
           <Route path="editstudent" element={<EditStudent />} />
-          <Route path="courselist" element={<CourseList />} />
+          <Route path="motivationlist" element={<MotivationList />} />
           <Route path="addcourse" element={<AddCourse />} />
           <Route path="editcourse" element={<EditCourse />} />
           <Route path="signup" element={<SignUp />} />

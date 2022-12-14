@@ -26,6 +26,16 @@ const GET_STUDENTS = gql`
     }
   }
 `;
+const GET_USERS = gql`
+  {
+    users {
+      _id
+      userName
+      email
+      userType
+    }
+  }
+`;
 
 const DELETE_STUDENT = gql`
   mutation deleteStudent($id: String!) {
@@ -37,8 +47,8 @@ const DELETE_STUDENT = gql`
 
 const StudentList = () => {
   const navigate = useNavigate();
-  const { loading, error, data, refetch } = useQuery(GET_STUDENTS);
-  const [deleteStudent, { data1 }] = useMutation(DELETE_STUDENT);
+  const { loading, error, data, refetch } = useQuery(GET_USERS);
+  // const [deleteStudent, { data1 }] = useMutation(DELETE_STUDENT);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
@@ -53,7 +63,7 @@ const StudentList = () => {
             <th>program</th>
           </tr>
 
-          {data.students.map((student, index) => (
+          {/* {data.students.map((student, index) => (
             <tr key={index}>
               <td>{student._id}</td>
               <td>{student.firstName}</td>
@@ -75,7 +85,7 @@ const StudentList = () => {
                 <Button
                   style={{ backgroundColor: "red" }}
                   onClick={() => {
-                    deleteStudent({ variables: { id: student._id } });
+                    // deleteStudent({ variables: { id: student._id } });
                     window.location.reload();
                   }}
                 >
@@ -83,7 +93,7 @@ const StudentList = () => {
                 </Button>
               </td>
             </tr>
-          ))}
+          ))} */}
         </tbody>
       </Table>
 

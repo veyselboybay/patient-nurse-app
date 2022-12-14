@@ -95,9 +95,9 @@ function Login() {
   };
   //runs the first time that the view is rendered
   //to check if user is signed in
-  useEffect(() => {
-    readCookie();
-  }, []); //only the first render
+  // useEffect(() => {
+  //   readCookie();
+  // }, []); //only the first render
   //
 
   if (loading) return "Submitting...";

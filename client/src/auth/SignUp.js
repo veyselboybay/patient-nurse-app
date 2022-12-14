@@ -10,11 +10,22 @@ import "./entryform.css";
 //
 //
 const CREATE_USER = gql`
-  mutation CreateUser($userName: String!, $email: String!, $password: String!) {
-    createUser(userName: $userName, email: $email, password: $password) {
+  mutation CreateUser(
+    $userName: String!
+    $email: String!
+    $password: String!
+    $userType: String!
+  ) {
+    createUser(
+      userName: $userName
+      email: $email
+      password: $password
+      userType: $userType
+    ) {
       userName
       email
       password
+      userType
     }
   }
 `;
@@ -23,7 +34,7 @@ const SignUp = () => {
   //
   let navigate = useNavigate();
   //
-  let userName, email, password;
+  let userName, email, password, userType;
   const [createUser, { data, loading, error }] = useMutation(CREATE_USER);
 
   if (loading) return "Submitting...";
@@ -38,14 +49,16 @@ const SignUp = () => {
               userName: userName.value,
               email: email.value,
               password: password.value,
+              userType: userType.value,
             },
           });
           //
           userName.value = "";
           email.value = "";
           password.value = "";
+          userType.value = "";
           //
-          navigate("/login");
+          // navigate("/login");
         }}
       >
         <h1>Sign Up</h1>
@@ -70,6 +83,17 @@ const SignUp = () => {
               email = node;
             }}
             placeholder="Email:"
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label> User Type:</Form.Label>
+          <Form.Control
+            type="text"
+            name="userType"
+            ref={(node) => {
+              userType = node;
+            }}
+            placeholder="Patient or Nurse"
           />
         </Form.Group>
 

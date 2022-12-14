@@ -99,7 +99,7 @@ const queryType = new GraphQLObjectType({
       vitalSigns: {
         type: new GraphQLList(vitalSignsType),
         args: {
-          id: GraphQLString,
+          id: { type: GraphQLString },
         },
         resolve: function () {
           const signs = VitalSignsModel.findOne({
@@ -267,6 +267,7 @@ const mutation = new GraphQLObjectType({
         resolve: async function (root, params, context) {
           const userModel = new UserModel(params);
           const newUser = await userModel.save();
+          console.log(newUser);
           if (!newUser) {
             throw new Error("Error");
           }
