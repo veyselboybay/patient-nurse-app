@@ -7,9 +7,9 @@ var GraphQLID = require("graphql").GraphQLID;
 var GraphQLString = require("graphql").GraphQLString;
 var GraphQLInt = require("graphql").GraphQLInt;
 var GraphQLDate = require("graphql-date");
-var StudentModel = require("../models/Student");
-var CourseModel = require("../models/Course");
 var UserModel = require("../models/User");
+var VitalSignsModel = require("../models/VitalSigns");
+var MotivationalTipsModel = require("../models/MotivationalTips");
 //
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -81,120 +81,40 @@ const motivationalTipsType = new GraphQLObjectType({
   },
 });
 
-// Create a GraphQL Object Type for Student model
-const studentType = new GraphQLObjectType({
-  name: "student",
-  fields: function () {
-    return {
-      _id: {
-        type: GraphQLString,
-      },
-      firstName: {
-        type: GraphQLString,
-      },
-      lastName: {
-        type: GraphQLString,
-      },
-      email: {
-        type: GraphQLString,
-      },
-      college: {
-        type: GraphQLString,
-      },
-      program: {
-        type: GraphQLString,
-      },
-      startingYear: {
-        type: GraphQLInt,
-      },
-    };
-  },
-});
-// CourseType
-const courseType = new GraphQLObjectType({
-  name: "course",
-  fields: function () {
-    return {
-      _id: {
-        type: GraphQLString,
-      },
-      courseCode: {
-        type: GraphQLString,
-      },
-      courseName: {
-        type: GraphQLString,
-      },
-      section: {
-        type: GraphQLString,
-      },
-      semester: {
-        type: GraphQLString,
-      },
-    };
-  },
-});
-
 // create a GraphQL query type that returns all students or a student by id
 const queryType = new GraphQLObjectType({
   name: "Query",
   fields: function () {
     return {
-      students: {
-        type: new GraphQLList(studentType),
+      motivationalTips: {
+        type: new GraphQLList(motivationalTipsType),
         resolve: function () {
-          const students = StudentModel.find().exec();
-          if (!students) {
+          const tips = MotivationalTipsModel.find().exec();
+          if (!tips) {
             throw new Error("Error");
           }
-          return students;
+          return tips;
         },
       },
-      student: {
-        type: studentType,
+      vitalSigns: {
+        type: new GraphQLList(vitalSignsType),
         args: {
-          id: {
-            name: "_id",
-            type: GraphQLString,
-          },
+          id: GraphQLString,
         },
-        resolve: function (root, params) {
-          const studentInfo = StudentModel.findById(params.id).exec();
-          if (!studentInfo) {
-            throw new Error("Error");
-          }
-          return studentInfo;
-        },
-      },
-      courses: {
-        type: new GraphQLList(courseType),
         resolve: function () {
-          const courses = CourseModel.find().exec();
-          if (!courses) {
-            throw new Error("error");
-          }
-          return courses;
-        },
-      },
-      course: {
-        type: courseType,
-        args: {
-          id: {
-            name: "_id",
-            type: GraphQLString,
-          },
-        },
-        resolve: function (root, params) {
-          const courseInfo = CourseModel.findById(params.id).exec();
-          if (!courseInfo) {
+          const signs = VitalSignsModel.findOne({
+            patientId: params.id,
+          }).exec();
+          if (!signs) {
             throw new Error("Error");
           }
-          return courseInfo;
+          return signs;
         },
       },
       users: {
         type: new GraphQLList(userType),
         resolve: function () {
-          const users = UserModel.find().exec();
+          const users = UserModel.findOne({ userType: "Patient" }).exec();
           if (!users) {
             throw new Error("Error");
           }
@@ -226,73 +146,68 @@ const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: function () {
     return {
-      addStudent: {
-        type: studentType,
+      addVitalSigns: {
+        type: vitalSignsType,
         args: {
-          firstName: {
-            type: new GraphQLNonNull(GraphQLString),
+          patientId: {
+            type: GraphQLString,
           },
-          lastName: {
-            type: new GraphQLNonNull(GraphQLString),
+          bodyTemperature: {
+            type: GraphQLInt,
           },
-          email: {
-            type: new GraphQLNonNull(GraphQLString),
+          heartRate: {
+            type: GraphQLInt,
           },
-          college: {
-            type: new GraphQLNonNull(GraphQLString),
+          bloodPressure: {
+            type: GraphQLInt,
           },
-          program: {
-            type: new GraphQLNonNull(GraphQLString),
+          respiratoryRate: {
+            type: GraphQLInt,
           },
-          startingYear: {
-            type: new GraphQLNonNull(GraphQLInt),
+          lastVisit: {
+            type: GraphQLString,
           },
         },
         resolve: function (root, params) {
-          const studentModel = new StudentModel(params);
-          const newStudent = studentModel.save();
-          if (!newStudent) {
+          const vitalSignsModel = new VitalSignsModel(params);
+          const newSign = vitalSignsModel.save();
+          if (!newSign) {
             throw new Error("Error");
           }
-          return newStudent;
+          return newSign;
         },
       },
-      updateStudent: {
-        type: studentType,
+      updateVitalSigns: {
+        type: vitalSignsType,
         args: {
-          id: {
-            name: "id",
-            type: new GraphQLNonNull(GraphQLString),
+          patientId: {
+            type: GraphQLString,
           },
-          firstName: {
-            type: new GraphQLNonNull(GraphQLString),
+          bodyTemperature: {
+            type: GraphQLInt,
           },
-          lastName: {
-            type: new GraphQLNonNull(GraphQLString),
+          heartRate: {
+            type: GraphQLInt,
           },
-          email: {
-            type: new GraphQLNonNull(GraphQLString),
+          bloodPressure: {
+            type: GraphQLInt,
           },
-          college: {
-            type: new GraphQLNonNull(GraphQLString),
+          respiratoryRate: {
+            type: GraphQLInt,
           },
-          program: {
-            type: new GraphQLNonNull(GraphQLString),
-          },
-          startingYear: {
-            type: new GraphQLNonNull(GraphQLInt),
+          lastVisit: {
+            type: GraphQLString,
           },
         },
         resolve(root, params) {
-          return StudentModel.findByIdAndUpdate(
-            params.id,
+          return VitalSignsModel.findOneAndUpdate(
+            { patientId: params.patientId },
             {
-              firstName: params.firstName,
-              lastName: params.lastName,
-              email: params.email,
-              college: params.college,
-              program: params.program,
-              startingYear: params.startingYear,
+              bodyTemperature: params.bodyTemperature,
+              heartRate: params.heartRate,
+              bloodPressure: params.bloodPressure,
+              respiratoryRate: params.respiratoryRate,
+              lastVisit: params.lastVisit,
             },
             function (err) {
               if (err) return next(err);
@@ -300,96 +215,37 @@ const mutation = new GraphQLObjectType({
           );
         },
       },
-      deleteStudent: {
-        type: studentType,
+      deleteVitalSign: {
+        type: vitalSignsType,
         args: {
           id: {
             type: new GraphQLNonNull(GraphQLString),
           },
         },
         resolve(root, params) {
-          const deletedStudent = StudentModel.findByIdAndRemove(
+          const deletedSign = VitalSignsModel.findByIdAndRemove(
             params.id
           ).exec();
-          if (!deletedStudent) {
+          if (!deletedSign) {
             throw new Error("Error");
           }
-          return deletedStudent;
+          return deletedSign;
         },
       },
-      addCourse: {
-        type: courseType,
+      addMotivationalTips: {
+        type: motivationalTipsType,
         args: {
-          courseCode: {
-            type: new GraphQLNonNull(GraphQLString),
-          },
-          courseName: {
-            type: new GraphQLNonNull(GraphQLString),
-          },
-          section: {
-            type: new GraphQLNonNull(GraphQLString),
-          },
-          semester: {
+          tip: {
             type: new GraphQLNonNull(GraphQLString),
           },
         },
         resolve: function (root, params) {
-          const courseModel = new CourseModel(params);
-          const newCourse = courseModel.save();
-          if (!newCourse) {
+          const motivationalTipsModel = new MotivationalTipsModel(params);
+          const newTip = motivationalTipsModel.save();
+          if (!newTip) {
             throw new Error("Error");
           }
-          return newCourse;
-        },
-      },
-      updateCourse: {
-        type: courseType,
-        args: {
-          id: {
-            name: "id",
-            type: new GraphQLNonNull(GraphQLString),
-          },
-          courseCode: {
-            type: new GraphQLNonNull(GraphQLString),
-          },
-          courseName: {
-            type: new GraphQLNonNull(GraphQLString),
-          },
-          section: {
-            type: new GraphQLNonNull(GraphQLString),
-          },
-          semester: {
-            type: new GraphQLNonNull(GraphQLString),
-          },
-        },
-        resolve(root, params) {
-          return CourseModel.findByIdAndUpdate(
-            params.id,
-            {
-              courseCode: params.courseCode,
-              courseName: params.courseName,
-              section: params.section,
-              semester: params.semester,
-            },
-            function (err) {
-              if (err) return next(err);
-            }
-          );
-        },
-      },
-      deleteCourse: {
-        type: courseType,
-        args: {
-          id: {
-            type: new GraphQLNonNull(GraphQLString),
-          },
-        },
-        resolve(root, params) {
-          const deletedCourse = CourseModel.findByIdAndRemove(params.id).exec();
-          if (!deletedCourse) {
-            throw new Error("Error");
-          }
-          return deletedCourse;
+          return newTip;
         },
       },
       createUser: {
@@ -402,6 +258,9 @@ const mutation = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLString),
           },
           password: {
+            type: new GraphQLNonNull(GraphQLString),
+          },
+          userType: {
             type: new GraphQLNonNull(GraphQLString),
           },
         },
