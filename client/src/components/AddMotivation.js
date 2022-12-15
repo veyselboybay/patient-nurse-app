@@ -57,7 +57,7 @@ const AddMotivation = () => {
 
         <Button variant="primary" type="submit">
           {" "}
-          Add Course{" "}
+          Add Tip{" "}
         </Button>
       </form>
     </div>

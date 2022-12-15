@@ -58,7 +58,7 @@ const SignUp = () => {
           password.value = "";
           userType.value = "";
           //
-          // navigate("/login");
+          navigate("/login");
         }}
       >
         <h1>Sign Up</h1>

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import ListGroup from "react-bootstrap/ListGroup";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 import Spinner from "react-bootstrap/Spinner";
 import { useNavigate } from "react-router-dom";
 //
@@ -24,12 +25,14 @@ const GET_MOTIVATION = gql`
 const CourseList = () => {
   const navigate = useNavigate();
   const { loading, error, data, refetch } = useQuery(GET_MOTIVATION);
-
+  useEffect(() => {
+    refetch();
+  }, []);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
   return (
-    <div>
+    <Container>
       <Table>
         <tbody>
           <tr>
@@ -59,7 +62,7 @@ const CourseList = () => {
       <Button style={{ backgroundColor: "green" }} onClick={() => refetch()}>
         Refetch
       </Button>
-    </div>
+    </Container>
   );
 };
 

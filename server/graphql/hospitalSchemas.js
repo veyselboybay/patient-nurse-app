@@ -101,13 +101,8 @@ const queryType = new GraphQLObjectType({
       },
       vitalSigns: {
         type: new GraphQLList(vitalSignsType),
-        args: {
-          id: { type: GraphQLString },
-        },
         resolve: function () {
-          const signs = VitalSignsModel.findOne({
-            patientId: params.id,
-          }).exec();
+          const signs = VitalSignsModel.find().exec();
           if (!signs) {
             throw new Error("Error");
           }

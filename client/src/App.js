@@ -27,6 +27,8 @@ import MotivationList from "./components/MotivationList";
 import AddMotivation from "./components/AddMotivation";
 import SignUp from "./auth/SignUp";
 import Login from "./auth/Login";
+import PatientPage from "./components/PatientPage";
+import AddSigns from "./components/AddSigns";
 
 //
 function App() {
@@ -81,10 +83,10 @@ function App() {
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
           <Route path="patientlist" element={<PatientList />} />
-          <Route path="addstudent" element={<AddStudent />} />
-          <Route path="editstudent" element={<EditStudent />} />
+          <Route path="patientPage" element={<PatientPage />} />
           <Route path="motivationlist" element={<MotivationList />} />
           <Route path="addmotivation" element={<AddMotivation />} />
+          <Route path="addSigns" element={<AddSigns />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<Login />} />
         </Routes>
