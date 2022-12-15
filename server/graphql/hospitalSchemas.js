@@ -275,7 +275,7 @@ const mutation = new GraphQLObjectType({
 
       //
       loginUser: {
-        type: GraphQLString,
+        type: userType,
         args: {
           email: {
             name: "email",
@@ -326,7 +326,7 @@ const mutation = new GraphQLObjectType({
             httpOnly: true,
           });
           //context.res.status(200).send({ screen: userInfo.username });
-          return userInfo.email;
+          return userInfo;
           //return { screen: userInfo.username }
           //return {token, userId: userInfo._id}
         }, //end of resolver function

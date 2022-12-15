@@ -19,8 +19,6 @@ import Container from "react-bootstrap/Container";
 import "./App.css";
 //
 import PatientList from "./components/PatientList";
-import AddStudent from "./components/AddStudent";
-import EditStudent from "./components/EditStudent";
 
 import Home from "./components/Home";
 import MotivationList from "./components/MotivationList";
@@ -29,9 +27,19 @@ import SignUp from "./auth/SignUp";
 import Login from "./auth/Login";
 import PatientPage from "./components/PatientPage";
 import AddSigns from "./components/AddSigns";
+import { useGlobalContext } from "./context";
 
 //
 function App() {
+  const {
+    loggedIn,
+    userName,
+    userType,
+    setLoggedIn,
+    setUserName,
+    setUserType,
+    setEmail,
+  } = useGlobalContext();
   return (
     <Router>
       <Navbar bg="primary" variant="dark" expand="lg">
@@ -43,36 +51,72 @@ function App() {
               <Nav.Link as={Link} to="/home">
                 Home
               </Nav.Link>
-              <Nav.Link as={Link} to="/patientlist">
-                Patient List
-              </Nav.Link>
+              {userType === "Nurse" && (
+                <Nav.Link as={Link} to="/patientlist">
+                  Patient List
+                </Nav.Link>
+              )}
               <Nav.Link as={Link} to="/motivationlist">
-                Motivation Tips
+                Daily Tips
               </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/signup"
-                style={{
-                  color: "black",
-                  border: "1px white solid",
-                  marginLeft: "250px",
-                  fontWeight: "bold",
-                }}
-              >
-                Sign-up
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/login"
-                style={{
-                  color: "black",
-                  border: "1px white solid",
-                  marginLeft: "10px",
-                  fontWeight: "bold",
-                }}
-              >
-                Login
-              </Nav.Link>
+              {userType === "Patient" && (
+                <Nav.Link as={Link} to="/patientPage">
+                  Patient Page
+                </Nav.Link>
+              )}
+              {loggedIn === false && (
+                <>
+                  <Nav.Link
+                    as={Link}
+                    to="/signup"
+                    style={{
+                      color: "white",
+                      border: "1px white solid",
+                      marginLeft: "250px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Sign-up
+                  </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to="/login"
+                    style={{
+                      color: "white",
+                      border: "1px white solid",
+                      marginLeft: "10px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Login
+                  </Nav.Link>
+                </>
+              )}
+              {loggedIn === true && (
+                <Nav.Link
+                  as={Link}
+                  to="/login"
+                  style={{
+                    color: "white",
+                    border: "1px white solid",
+                    marginLeft: "250px",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => {
+                    setLoggedIn(false);
+                    setUserName("");
+                    setUserType("");
+                    setEmail("");
+                  }}
+                >
+                  Logout
+                </Nav.Link>
+              )}
+              {loggedIn === true && (
+                <Navbar.Brand style={{ marginLeft: "20px" }}>
+                  Hello, {userName}! ({userType})
+                </Navbar.Brand>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

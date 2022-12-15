@@ -7,7 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { ApolloProvider } from "@apollo/client";
 //
-
+import { AppProvider } from "./context";
 //
 //
 const client = new ApolloClient({
@@ -19,7 +19,9 @@ const client = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <AppProvider>
+        <App />
+      </AppProvider>
     </ApolloProvider>
   </React.StrictMode>,
 

@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Spinner from "react-bootstrap/Spinner";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../context";
 //
 //
 // To parse the GraphQL operations, we use a special function
@@ -23,6 +24,7 @@ const GET_MOTIVATION = gql`
 
 //
 const CourseList = () => {
+  const { userType } = useGlobalContext();
   const navigate = useNavigate();
   const { loading, error, data, refetch } = useQuery(GET_MOTIVATION);
   useEffect(() => {
@@ -54,15 +56,14 @@ const CourseList = () => {
         </tbody>
       </Table>
 
-      <Button
-        style={{ backgroundColor: "lightblue", color: "black" }}
-        onClick={() => navigate(`/addmotivation`)}
-      >
-        Add Motivational Tip
-      </Button>
-      <Button style={{ backgroundColor: "green" }} onClick={() => refetch()}>
-        Refetch
-      </Button>
+      {userType === "Nurse" && (
+        <Button
+          style={{ backgroundColor: "lightblue", color: "black" }}
+          onClick={() => navigate(`/addmotivation`)}
+        >
+          Add Motivational Tip
+        </Button>
+      )}
     </Container>
   );
 };

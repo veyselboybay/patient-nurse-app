@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useGlobalContext } from "../context";
 
 const VITAL_SIGNS = gql`
   {
@@ -20,13 +21,17 @@ const VITAL_SIGNS = gql`
 `;
 
 function PatientPage() {
+  const { userType, userName, id, email } = useGlobalContext();
   useEffect(() => {
     refetch();
   }, []);
   let navigate = useNavigate();
+  let user, userId;
   const { state } = useLocation();
-  let user = state.user;
-  let userId = state.user._id;
+
+  user = state.user;
+  userId = state.user._id;
+
   const { loading, error, data, refetch } = useQuery(VITAL_SIGNS);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
@@ -34,7 +39,7 @@ function PatientPage() {
     <Container style={{ marginTop: "40px" }}>
       <Card>
         <Card.Header>
-          <b>Patient Information = {userId}</b>
+          <b>Patient Information = {userId} </b>
         </Card.Header>
         <Card.Body>
           <p>Username: {state.user.userName}</p>
